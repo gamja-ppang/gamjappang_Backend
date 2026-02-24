@@ -29,8 +29,10 @@ public class SendService {
             ## Internal Server Error
             - Method: `%s`
             - URI: `%s`
-            - %s
-            """.formatted(method, uri, e.getMessage());
+            - %s: %s
+            """.formatted(method, uri, e.getClass().getSimpleName(),
+                e.getMessage() != null ? e.getMessage() : "(no message)");
+
 
         // 2000자 이상이면 자름
         if (errorMessage.length() > 2000) {

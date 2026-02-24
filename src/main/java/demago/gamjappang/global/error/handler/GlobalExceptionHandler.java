@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(GamjaException.class)
     public ResponseEntity<ErrorResponse> handleGamjaException(GamjaException e, HttpServletRequest request) {

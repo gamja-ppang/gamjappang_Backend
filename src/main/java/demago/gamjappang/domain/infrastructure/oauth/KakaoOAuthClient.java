@@ -1,0 +1,81 @@
+package demago.gamjappang.domain.infrastructure.oauth;
+
+import java.util.Map;
+
+import demago.gamjappang.global.error.exception.GamjaException;
+import demago.gamjappang.global.security.userdetails.exception.SocialErrorCode;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
+
+@Component
+public class KakaoOAuthClient implements OAuthProviderClient {
+
+    private static final ParameterizedTypeReference<Map<String, Object>> MAP_TYPE =
+            new ParameterizedTypeReference<>() {};
+
+    private final RestClient restClient = RestClient.create();
+
+    @Value("${app.oauth.kakao.client-id}")
+    private String clientId;
+
+    @Value("${app.oauth.kakao.client-secret}")
+    private String clientSecret;
+
+    @Value("${app.oauth.kakao.token-uri:https://kauth.kakao.com/oauth/token}")
+    private String tokenUri;
+
+    @Value("${app.oauth.kakao.userinfo-uri:https://kapi.kakao.com/v2/user/me}")
+    private String userinfoUri;
+
+    @Override
+    public String provider() {
+        return "kakao";
+    }
+
+    @Override
+    public OAuthUserInfo fetchUser(String authorizationCode, String redirectUri) {
+        try {
+            Map<String, Object> token = restClient.post()
+                    .uri(tokenUri)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body("grant_type=authorization_code" +
+                            "&client_id=" + clientId +
+                            (clientSecret == null || clientSecret.isBlank() ? "" : "&client_secret=" + clientSecret) +
+                            "&redirect_uri=" + redirectUri +
+                            "&code=" + authorizationCode)
+                    .retrieve()
+                    .body(MAP_TYPE);
+
+            String accessToken = (String) token.get("access_token");
+            if (accessToken == null) throw new GamjaException(SocialErrorCode.OAUTH_PROVIDER_FAILED);
+
+            Map<String, Object> me = restClient.get()
+                    .uri(userinfoUri)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .retrieve()
+                    .body(MAP_TYPE);
+
+            Map<String, Object> account = asStringObjectMap(me.get("kakao_account"));
+            Map<String, Object> props = asStringObjectMap(me.get("properties"));
+
+            String email = account == null ? null : (String) account.get("email");
+            String name = props == null ? "kakao_user" : (String) props.getOrDefault("nickname", "kakao_user");
+            if (email == null) throw new GamjaException(SocialErrorCode.OAUTH_PROVIDER_FAILED);
+
+            return new OAuthUserInfo(email, name);
+        } catch (Exception e) {
+            throw new GamjaException(SocialErrorCode.OAUTH_PROVIDER_FAILED);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> asStringObjectMap(Object value) {
+        if (value instanceof Map<?, ?> map) {
+            return (Map<String, Object>) map;
+        }
+        return null;
+    }
+}

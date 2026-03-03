@@ -40,6 +40,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.socialLogin(req.getProvider(), req.getAuthorizationCode(), req.getRedirectUri()));
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshRequest req) {
+        return ResponseEntity.ok(authService.refresh(req.getRefreshToken()));
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@AuthenticationPrincipal UserPrincipal principal,
                                        @Valid @RequestBody LogoutRequest req) {

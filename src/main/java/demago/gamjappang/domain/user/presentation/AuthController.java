@@ -24,7 +24,7 @@ public class AuthController {
         return ResponseEntity.status(201).build();
     }
 
-    @PostMapping("/verify")
+    @PostMapping("/code/verify")
     public ResponseEntity<Void> verify(@Valid @RequestBody VerifyRequest req) {
         authService.verifyEmail(req.getEmail(), req.getSignupCode());
         return ResponseEntity.noContent().build();

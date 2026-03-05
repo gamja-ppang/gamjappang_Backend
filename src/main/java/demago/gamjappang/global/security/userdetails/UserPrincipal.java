@@ -16,17 +16,19 @@ public class UserPrincipal implements UserDetails {
     private final String password;
     private final Role role;
     private final boolean verified;
+    private final boolean blocked;
 
-    public UserPrincipal(Long id, String email, String password, Role role, boolean verified) {
+    public UserPrincipal(Long id, String email, String password, Role role, boolean verified, boolean blocked) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.role = role;
         this.verified = verified;
+        this.blocked = blocked;
     }
 
     public static UserPrincipal from(User user) {
-        return new UserPrincipal(user.getId(), user.getEmail(), user.getPassword(), user.getRole(), user.isVerified());
+        return new UserPrincipal(user.getId(), user.getEmail(), user.getPassword(), user.getRole(), user.isVerified(), user.isBlocked());
     }
 
     public Long getId() { return id; }
@@ -46,7 +48,7 @@ public class UserPrincipal implements UserDetails {
     public boolean isAccountNonExpired() { return true; }
 
     @Override
-    public boolean isAccountNonLocked() { return true; }
+    public boolean isAccountNonLocked() { return !blocked; }
 
     @Override
     public boolean isCredentialsNonExpired() { return true; }

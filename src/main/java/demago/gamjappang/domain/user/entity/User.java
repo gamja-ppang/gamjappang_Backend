@@ -28,8 +28,10 @@ public class User {
     @Column(nullable = false, length = 20)
     private Role role = Role.USER;
 
+    @Column(name = "is_verified")
     private boolean isVerified;
 
+    @Column(name = "is_blocked")
     private boolean isBlocked;
 
     public static User of(

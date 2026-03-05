@@ -20,41 +20,41 @@ public class AuthController {
 
     @PostMapping("/join")
     public ResponseEntity<Void> join(@Valid @RequestBody JoinRequest req) {
-        authService.join(req.getUsername(), req.getEmail(), req.getPassword());
+        authService.join(req.username(), req.email(), req.password());
         return ResponseEntity.status(201).build();
     }
 
     @PostMapping("/code/send")
     public ResponseEntity<Void> sendVerificationCode(@Valid @RequestBody SendRequset req) {
-        authService.sendVerificationCode(req.getEmail());
+        authService.sendVerificationCode(req.email());
         return ResponseEntity.status(204).build();
     }
 
     @PostMapping("/code/verify")
     public ResponseEntity<Void> verify(@Valid @RequestBody VerifyRequest req) {
-        authService.verifyEmail(req.getEmail(), req.getSignupCode());
+        authService.verifyEmail(req.email(), req.signupCode());
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest req) {
-        return ResponseEntity.ok(authService.login(req.getEmail(), req.getPassword()));
+        return ResponseEntity.ok(authService.login(req.email(), req.password()));
     }
 
     @PostMapping("/social")
     public ResponseEntity<TokenResponse> social(@Valid @RequestBody SocialLoginRequest req) {
-        return ResponseEntity.ok(authService.socialLogin(req.getProvider(), req.getAuthorizationCode(), req.getRedirectUri()));
+        return ResponseEntity.ok(authService.socialLogin(req.provider(), req.authorizationCode(), req.redirectUri()));
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshRequest req) {
-        return ResponseEntity.ok(authService.refresh(req.getRefreshToken()));
+        return ResponseEntity.ok(authService.refresh(req.refreshToken()));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@AuthenticationPrincipal UserPrincipal principal,
                                        @Valid @RequestBody LogoutRequest req) {
-        authService.logout(principal, req.getRefreshToken());
+        authService.logout(principal, req.refreshToken());
         return ResponseEntity.noContent().build();
     }
 }

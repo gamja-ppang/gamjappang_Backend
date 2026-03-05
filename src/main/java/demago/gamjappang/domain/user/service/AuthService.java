@@ -55,7 +55,10 @@ public class AuthService {
 
         User user = User.of(username, email, encodedPassword);
         userRepository.save(user);
+    }
 
+    @Transactional
+    public void sendVerificationCode(String email) {
         String code = signupCodeService.issue(email);
         mailService.sendVerificationEmail(email, code);
     }

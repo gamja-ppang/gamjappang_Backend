@@ -3,17 +3,11 @@ package demago.gamjappang.domain.user.presentation.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginRequest {
+public record LoginRequest (
 
     @NotBlank @Email
-    private String email;
+    String email,
 
     @NotBlank
-    private String password;
-
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
-
-    public void setEmail(String email) { this.email = email; }
-    public void setPassword(String password) { this.password = password; }
-}
+    String password
+) {}

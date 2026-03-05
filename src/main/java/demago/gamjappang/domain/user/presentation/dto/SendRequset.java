@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
-public class SendRequset {
-    @Email
-    private String email;
-}
+public record SendRequset (
+
+        @Email
+        String email
+) {}

@@ -18,16 +18,16 @@ public class KakaoOAuthClient implements OAuthProviderClient {
 
     private final RestClient restClient = RestClient.create();
 
-    @Value("${app.oauth.kakao.client-id}")
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
 
-    @Value("${app.oauth.kakao.client-secret}")
+    @Value("${spring.security.oauth2.client.registration.kakao.client-secret:}")
     private String clientSecret;
 
-    @Value("${app.oauth.kakao.token-uri:https://kauth.kakao.com/oauth/token}")
+    @Value("${spring.security.oauth2.client.provider.kakao.token-uri:https://kauth.kakao.com/oauth/token}")
     private String tokenUri;
 
-    @Value("${app.oauth.kakao.userinfo-uri:https://kapi.kakao.com/v2/user/me}")
+    @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri:https://kapi.kakao.com/v2/user/me}")
     private String userinfoUri;
 
     @Override

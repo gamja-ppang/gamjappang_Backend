@@ -18,16 +18,17 @@ public class GoogleOAuthClient implements OAuthProviderClient {
 
     private final RestClient restClient = RestClient.create();
 
-    @Value("${app.oauth.google.client-id}")
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
 
-    @Value("${app.oauth.google.client-secret}")
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String clientSecret;
 
-    @Value("${app.oauth.google.token-uri:https://oauth2.googleapis.com/token}")
+    // google provider.* 는 네 properties에 없어서(지금) 기본값 fallback 유지
+    @Value("${spring.security.oauth2.client.provider.google.token-uri:https://oauth2.googleapis.com/token}")
     private String tokenUri;
 
-    @Value("${app.oauth.google.userinfo-uri:https://openidconnect.googleapis.com/v1/userinfo}")
+    @Value("${spring.security.oauth2.client.provider.google.user-info-uri:https://openidconnect.googleapis.com/v1/userinfo}")
     private String userinfoUri;
 
     @Override

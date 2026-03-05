@@ -10,7 +10,7 @@ public enum SocialErrorCode implements ErrorCode {
     INVALID_AUTHCODE(HttpStatus.BAD_REQUEST, "SCL_400_02","authorizationCode가 유효하지 않습니다."),
 
     // 500
-    OAUTH_PROVIDER_FAILED(HttpStatus.BAD_GATEWAY, "SCL_500", "provider 통신에 실패하였습니다.");
+    OAUTH_PROVIDER_FAILED(HttpStatus.BAD_GATEWAY, "SCL_502", "provider 통신에 실패하였습니다.");
 
     private final HttpStatus status;
     private final String code;

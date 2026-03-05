@@ -24,6 +24,12 @@ public class AuthController {
         return ResponseEntity.status(201).build();
     }
 
+    @PostMapping("/code/send")
+    public ResponseEntity<Void> sendVerificationCode(@Valid @RequestBody SendRequset req) {
+        authService.sendVerificationCode(req.getEmail());
+        return ResponseEntity.status(204).build();
+    }
+
     @PostMapping("/code/verify")
     public ResponseEntity<Void> verify(@Valid @RequestBody VerifyRequest req) {
         authService.verifyEmail(req.getEmail(), req.getSignupCode());

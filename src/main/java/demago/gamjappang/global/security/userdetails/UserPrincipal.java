@@ -1,13 +1,14 @@
 package demago.gamjappang.global.security.userdetails;
 
-import java.util.Collection;
-import java.util.List;
-
-import demago.gamjappang.domain.user.entity.Role;
-import demago.gamjappang.domain.user.entity.User;
+import demago.gamjappang.user.domain.model.Role;
+import demago.gamjappang.user.domain.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+
 
 public class UserPrincipal implements UserDetails {
 
@@ -28,10 +29,19 @@ public class UserPrincipal implements UserDetails {
     }
 
     public static UserPrincipal from(User user) {
-        return new UserPrincipal(user.getId(), user.getEmail(), user.getPassword(), user.getRole(), user.isVerified(), user.isBlocked());
+        return new UserPrincipal(
+                user.getId(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole(),
+                user.isVerified(),
+                user.isBlocked()
+        );
     }
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -39,20 +49,33 @@ public class UserPrincipal implements UserDetails {
     }
 
     @Override
-    public String getPassword() { return password; }
+    public String getPassword() {
+        return password;
+    }
 
     @Override
-    public String getUsername() { return email; }
+    public String getUsername() {
+        return email;
+    }
 
     @Override
-    public boolean isAccountNonExpired() { return true; }
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
     @Override
-    public boolean isAccountNonLocked() { return !blocked; }
+    public boolean isAccountNonLocked() {
+        return !blocked;
+    }
 
     @Override
-    public boolean isCredentialsNonExpired() { return true; }
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
     @Override
-    public boolean isEnabled() { return verified; }
+    public boolean isEnabled() {
+        return verified;
+    }
 }
+

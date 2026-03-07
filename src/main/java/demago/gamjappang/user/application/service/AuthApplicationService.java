@@ -105,6 +105,10 @@ public class AuthApplicationService implements
         User user = userRepositoryPort.findById(userId)
                 .orElseThrow(() -> new GamjaException(UserErrorCode.USER_NOT_FOUND));
 
+        if (user.isBlocked()) {
+            throw new GamjaException(UserErrorCode.USER_BLOCKED);
+        }
+
         String newAccess = tokenPort.createAccessToken(user);
         String newRefresh = tokenPort.createRefreshToken(user);
         refreshTokenPort.save(userId, newRefresh);

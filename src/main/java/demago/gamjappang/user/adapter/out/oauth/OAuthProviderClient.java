@@ -1,4 +1,6 @@
-package demago.gamjappang.domain.infrastructure.oauth;
+package demago.gamjappang.user.adapter.out.oauth;
+
+import demago.gamjappang.user.application.port.out.OAuthUserInfo;
 
 public interface OAuthProviderClient {
     String provider();

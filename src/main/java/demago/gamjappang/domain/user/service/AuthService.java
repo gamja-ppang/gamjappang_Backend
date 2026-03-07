@@ -118,9 +118,6 @@ public class AuthService {
     @Transactional
     public TokenResponse socialLogin(String provider, String authorizationCode, String redirectUri) {
         var client = oauthRegistry.get(provider);
-        if (client == null) {
-            throw new GamjaException(SocialErrorCode.OAUTH_BAD_REQUEST);
-        }
 
         OAuthUserInfo info = client.fetchUser(authorizationCode, redirectUri);
 

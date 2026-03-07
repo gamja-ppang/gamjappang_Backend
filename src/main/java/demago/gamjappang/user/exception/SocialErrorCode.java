@@ -9,7 +9,7 @@ public enum SocialErrorCode implements ErrorCode {
     OAUTH_BAD_REQUEST(HttpStatus.BAD_REQUEST, "SCL_400_01","provider/code/redirectUri가 누락되었습니다."),
     INVALID_AUTHCODE(HttpStatus.BAD_REQUEST, "SCL_400_02","authorizationCode가 유효하지 않습니다."),
 
-    // 500
+    // 502
     OAUTH_PROVIDER_FAILED(HttpStatus.BAD_GATEWAY, "SCL_502", "provider 통신에 실패하였습니다.");
 
     private final HttpStatus status;

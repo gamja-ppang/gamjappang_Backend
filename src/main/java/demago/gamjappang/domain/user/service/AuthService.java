@@ -82,7 +82,7 @@ public class AuthService {
         if (!user.isVerified()) {
             throw new GamjaException(UserErrorCode.EMAIL_NOT_VERIFIED);
         }
-        if (!user.isBlocked()) {
+        if (user.isBlocked()) {
             throw new GamjaException(UserErrorCode.USER_BLOCKED);
         }
 

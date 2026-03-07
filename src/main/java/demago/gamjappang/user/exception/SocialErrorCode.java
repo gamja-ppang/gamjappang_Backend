@@ -1,4 +1,4 @@
-package demago.gamjappang.global.security.userdetails.exception;
+package demago.gamjappang.user.exception;
 
 import demago.gamjappang.global.error.ErrorCode;
 import org.springframework.http.HttpStatus;

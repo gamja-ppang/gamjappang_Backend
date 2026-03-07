@@ -1,5 +1,7 @@
 package demago.gamjappang.domain.infrastructure.oauth;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import demago.gamjappang.global.error.exception.GamjaException;
@@ -31,6 +33,10 @@ public class GoogleOAuthClient implements OAuthProviderClient {
     @Value("${spring.security.oauth2.client.provider.google.user-info-uri:https://openidconnect.googleapis.com/v1/userinfo}")
     private String userinfoUri;
 
+    private String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+
     @Override
     public String provider() {
         return "google";
@@ -42,10 +48,10 @@ public class GoogleOAuthClient implements OAuthProviderClient {
             Map<String, Object> token = restClient.post()
                     .uri(tokenUri)
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .body("code=" + authorizationCode +
-                            "&client_id=" + clientId +
-                            "&client_secret=" + clientSecret +
-                            "&redirect_uri=" + redirectUri +
+                    .body("code=" + encode(authorizationCode) +
+                            "&client_id=" + encode(clientId) +
+                            "&client_secret=" + encode(clientSecret) +
+                            "&redirect_uri=" + encode(redirectUri) +
                             "&grant_type=authorization_code")
                     .retrieve()
                     .body(MAP_TYPE);

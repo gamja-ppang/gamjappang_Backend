@@ -1,36 +1,40 @@
-package demago.gamjappang.domain.infrastructure.mail;
+package demago.gamjappang.user.adapter.out.redis;
 
 import java.security.SecureRandom;
 import java.time.Duration;
 
-import demago.gamjappang.domain.user.exception.UserErrorCode;
 import demago.gamjappang.global.error.exception.GamjaException;
+import demago.gamjappang.user.application.port.out.VerificationCodePort;
+import demago.gamjappang.user.exception.UserErrorCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
-public class SignupCodeService {
+@Component
+public class RedisVerificationCodeAdapter implements VerificationCodePort {
 
-    private static final String PREFIX = "verification_code:"; // key: verification_code:{email}
-    private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // 헷갈리는 문자 제거
+    private static final String PREFIX = "verification_code:";
+    private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
     private final SecureRandom random = new SecureRandom();
-
     private final StringRedisTemplate redis;
     private final long ttlSeconds;
 
-    public SignupCodeService(StringRedisTemplate redis,
-                             @Value("${app.verification.ttl-seconds:500}") long ttlSeconds) {
+    public RedisVerificationCodeAdapter(StringRedisTemplate redis,
+                                        @Value("${app.verification.ttl-seconds:500}") long ttlSeconds) {
         this.redis = redis;
         this.ttlSeconds = ttlSeconds;
     }
 
+    @Override
     public String issue(String email) {
         String code = randomCode(6);
         redis.opsForValue().set(PREFIX + email, code, Duration.ofSeconds(ttlSeconds));
         return code;
     }
 
+    @Override
     public void verify(String email, String code) {
         String saved = redis.opsForValue().get(PREFIX + email);
         if (saved == null || !saved.equalsIgnoreCase(code)) {
@@ -47,3 +51,4 @@ public class SignupCodeService {
         return sb.toString();
     }
 }
+

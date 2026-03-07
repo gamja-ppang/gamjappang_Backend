@@ -74,6 +74,8 @@ public class KakaoOAuthClient implements OAuthProviderClient {
             if (email == null) throw new GamjaException(SocialErrorCode.OAUTH_PROVIDER_FAILED);
 
             return new OAuthUserInfo(email, name);
+        } catch (GamjaException e) {
+            throw e;
         } catch (Exception e) {
             throw new GamjaException(SocialErrorCode.OAUTH_PROVIDER_FAILED);
         }

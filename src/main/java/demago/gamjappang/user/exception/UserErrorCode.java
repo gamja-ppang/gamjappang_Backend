@@ -20,7 +20,7 @@ public enum UserErrorCode implements ErrorCode {
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "USR_409", "이미 가입된 이메일입니다."),
 
     // 503
-    EMAIL_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "USR_503", "이메일 전송에 실패하였습니다.");
+    EMAIL_SEND_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "USR_503", "이메일 전송에 실패하였습니다.");
 
     private final HttpStatus status;
     private final String code;

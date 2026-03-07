@@ -1,5 +1,7 @@
 package demago.gamjappang.domain.infrastructure.oauth;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import demago.gamjappang.global.error.exception.GamjaException;
@@ -30,6 +32,10 @@ public class KakaoOAuthClient implements OAuthProviderClient {
     @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri:https://kapi.kakao.com/v2/user/me}")
     private String userinfoUri;
 
+    private String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+
     @Override
     public String provider() {
         return "kakao";
@@ -42,10 +48,10 @@ public class KakaoOAuthClient implements OAuthProviderClient {
                     .uri(tokenUri)
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .body("grant_type=authorization_code" +
-                            "&client_id=" + clientId +
-                            (clientSecret == null || clientSecret.isBlank() ? "" : "&client_secret=" + clientSecret) +
-                            "&redirect_uri=" + redirectUri +
-                            "&code=" + authorizationCode)
+                            "&client_id=" + encode(clientId) +
+                            (clientSecret == null || clientSecret.isBlank() ? "" : "&client_secret=" + encode(clientSecret)) +
+                            "&redirect_uri=" + encode(redirectUri) +
+                            "&code=" + encode(authorizationCode))
                     .retrieve()
                     .body(MAP_TYPE);
 

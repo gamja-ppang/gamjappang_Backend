@@ -1,11 +1,12 @@
-package demago.gamjappang.domain.infrastructure.oauth;
+package demago.gamjappang.user.adapter.out.oauth;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import demago.gamjappang.global.error.exception.GamjaException;
-import demago.gamjappang.global.security.userdetails.exception.SocialErrorCode;
+import demago.gamjappang.user.application.port.out.OAuthUserInfo;
+import demago.gamjappang.user.exception.SocialErrorCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;

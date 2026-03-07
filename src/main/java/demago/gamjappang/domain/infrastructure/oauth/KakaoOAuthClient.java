@@ -55,6 +55,8 @@ public class KakaoOAuthClient implements OAuthProviderClient {
                     .retrieve()
                     .body(MAP_TYPE);
 
+            if (token == null) throw new GamjaException(SocialErrorCode.OAUTH_PROVIDER_FAILED);
+
             String accessToken = (String) token.get("access_token");
             if (accessToken == null) throw new GamjaException(SocialErrorCode.OAUTH_PROVIDER_FAILED);
 

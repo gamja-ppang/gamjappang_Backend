@@ -96,7 +96,6 @@ public class AuthApplicationService implements
     }
 
     @Override
-    @Transactional(readOnly = true)
     public TokenResult refresh(RefreshCommand command) {
         tokenPort.validate(command.refreshToken());
         Long userId = tokenPort.getUserId(command.refreshToken());

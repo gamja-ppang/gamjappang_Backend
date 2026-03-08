@@ -74,7 +74,6 @@ public class AuthApplicationService implements
     }
 
     @Override
-    @Transactional(readOnly = true)
     public TokenResult login(LoginCommand command) {
         User user = userRepositoryPort.findByEmail(command.email())
                 .orElseThrow(() -> new GamjaException(UserErrorCode.EMAIL_NOT_FOUND));

@@ -1,4 +1,4 @@
-package demago.gamjappang.user.application.port.in.result;
+package demago.gamjappang.user.applicationcore.port.in.result;
 
 public record TokenResult(String accessToken, String refreshToken) {
 }

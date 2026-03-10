@@ -1,10 +1,10 @@
-package demago.gamjappang.user.application.service;
+package demago.gamjappang.user.applicationcore.service;
 
 import demago.gamjappang.global.error.exception.GamjaException;
-import demago.gamjappang.user.application.port.in.*;
-import demago.gamjappang.user.application.port.in.command.*;
-import demago.gamjappang.user.application.port.in.result.TokenResult;
-import demago.gamjappang.user.application.port.out.*;
+import demago.gamjappang.user.applicationcore.port.in.*;
+import demago.gamjappang.user.applicationcore.port.in.command.*;
+import demago.gamjappang.user.applicationcore.port.in.result.TokenResult;
+import demago.gamjappang.user.applicationcore.port.out.*;
 import demago.gamjappang.user.domain.model.User;
 import demago.gamjappang.user.exception.UserErrorCode;
 import org.springframework.stereotype.Service;

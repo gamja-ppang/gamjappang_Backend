@@ -1,4 +1,4 @@
-package demago.gamjappang.user.application.port.out;
+package demago.gamjappang.user.applicationcore.port.out;
 
 public interface PasswordEncoderPort {
     String encode(String rawPassword);

@@ -1,4 +1,4 @@
-package demago.gamjappang.user.application.port.out;
+package demago.gamjappang.user.applicationcore.port.out;
 
 import demago.gamjappang.global.security.userdetails.UserPrincipal;
 import demago.gamjappang.user.domain.model.User;

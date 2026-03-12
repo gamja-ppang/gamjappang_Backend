@@ -44,6 +44,10 @@ public class SecurityConfig {
                                 "/api/v1/auth/social",
                                 "/api/v1/auth/refresh"
                         ).permitAll()
+
+                        .requestMatchers(
+                                "/api/v1/management/**"
+                        ).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

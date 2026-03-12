@@ -35,7 +35,7 @@ public class PostJpaEntity {
     @Column(name = "create_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "create_at")
+    @Column(name = "update_at")
     private LocalDateTime updatedAt;
 
     protected PostJpaEntity() {

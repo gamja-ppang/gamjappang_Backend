@@ -35,8 +35,8 @@ public class Post {
         this.updatedAt = updatedAt;
     }
 
-    public static Post create(User user, String title, String content, List<String> tags, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        return new Post(null, user, title, content, 0, tags, createdAt, updatedAt);
+    public static Post create(User user, String title, String content, List<String> tags) {
+        return new Post(null, user, title, content, 0, tags, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public static Post restore(Long id, User user, String title, String content, int viewCount, List<String> tags, LocalDateTime createdAt, LocalDateTime updatedAt) {

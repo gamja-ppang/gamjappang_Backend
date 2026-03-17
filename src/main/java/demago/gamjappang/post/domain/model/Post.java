@@ -13,14 +13,16 @@ public class Post {
     private final User user;
     private final String title;
     private final String content;
-    private final int viewCount;
     private final List<String> tags;
+    private final int viewCount;
+    private final int commentCount;
+    private final int heartCount;
 
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
 
-    public Post(Long id, User user, String title, String content, int viewCount, List<String> tags, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Post(Long id, User user, String title, String content, List<String> tags, int viewCount, int heartCount, int commentCount,  LocalDateTime createdAt, LocalDateTime updatedAt) {
         validateUser(user);
         validateTitle(title);
         validateContent(content);
@@ -29,18 +31,20 @@ public class Post {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.viewCount = viewCount;
         this.tags = tags;
+        this.viewCount = viewCount;
+        this.heartCount = heartCount;
+        this.commentCount = commentCount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     public static Post create(User user, String title, String content, List<String> tags) {
-        return new Post(null, user, title, content, 0, tags, LocalDateTime.now(), LocalDateTime.now());
+        return new Post(null, user, title, content, tags, 0, 0, 0, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    public static Post restore(Long id, User user, String title, String content, int viewCount, List<String> tags, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        return new Post(id, user, title, content, viewCount, tags, createdAt, updatedAt);
+    public static Post restore(Long id, User user, String title, String content, List<String> tags, int viewCount, int heartCount, int commentCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        return new Post(id, user, title, content, tags, viewCount, heartCount, commentCount, createdAt, updatedAt);
     }
 
     private static void validateUser(User user) {
@@ -78,12 +82,20 @@ public class Post {
         return content;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+
     public int getViewCount() {
         return viewCount;
     }
 
-    public List<String> getTags() {
-        return tags;
+    public int getHeartCount() {
+        return heartCount;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
     }
 
     public LocalDateTime getCreatedAt() {

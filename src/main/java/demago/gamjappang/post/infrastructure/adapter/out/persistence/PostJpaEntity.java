@@ -25,12 +25,16 @@ public class PostJpaEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    private int viewCount;
-
     @ElementCollection
     @CollectionTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
     @Column(name = "tag")
     private List<String> tags = new ArrayList<>();
+
+    private int viewCount;
+
+    private int heartCount;
+
+    private int commentCount;
 
     @Column(name = "create_at")
     private LocalDateTime createdAt;
@@ -46,8 +50,10 @@ public class PostJpaEntity {
             UserJpaEntity user,
             String title,
             String content,
-            int viewCount,
             List<String> tags,
+            int viewCount,
+            int heartCount,
+            int commentCount,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {
@@ -55,8 +61,10 @@ public class PostJpaEntity {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.viewCount = viewCount;
         this.tags = tags;
+        this.viewCount = viewCount;
+        this.heartCount = heartCount;
+        this.commentCount = commentCount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -77,12 +85,20 @@ public class PostJpaEntity {
         return content;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+
     public int getViewCount() {
         return viewCount;
     }
 
-    public List<String> getTags() {
-        return tags;
+    public int getHeartCount() {
+        return heartCount;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
     }
 
     public LocalDateTime getCreatedAt() {

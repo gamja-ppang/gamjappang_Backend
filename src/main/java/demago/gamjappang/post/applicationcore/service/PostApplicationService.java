@@ -1,21 +1,30 @@
 package demago.gamjappang.post.applicationcore.service;
 
+import demago.gamjappang.global.error.GlobalErrorCode;
 import demago.gamjappang.global.error.exception.GamjaException;
 import demago.gamjappang.post.applicationcore.port.in.CreatePostUseCase;
+import demago.gamjappang.post.applicationcore.port.in.UpdatePostUseCase;
 import demago.gamjappang.post.applicationcore.port.in.command.CreatePostCommand;
+import demago.gamjappang.post.applicationcore.port.in.command.UpdatePostCommand;
 import demago.gamjappang.post.applicationcore.port.in.result.CreatePostResult;
+import demago.gamjappang.post.applicationcore.port.in.result.UpdatePostResult;
 import demago.gamjappang.post.applicationcore.port.out.PostRepositoryPort;
 import demago.gamjappang.post.domain.model.Post;
+import demago.gamjappang.post.exception.PostErrorCode;
 import demago.gamjappang.user.applicationcore.port.out.UserRepositoryPort;
 import demago.gamjappang.user.domain.model.User;
 import demago.gamjappang.user.exception.UserErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 @Service
 @Transactional
 public class PostApplicationService implements
-        CreatePostUseCase {
+        CreatePostUseCase,
+        UpdatePostUseCase {
 
     private final PostRepositoryPort postRepositoryPort;
     private final UserRepositoryPort userRepositoryPort;
@@ -28,7 +37,7 @@ public class PostApplicationService implements
     @Override
     public CreatePostResult createPost(CreatePostCommand command) {
         User author = userRepositoryPort.findById(command.userId())
-                        .orElseThrow(() -> new GamjaException(UserErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new GamjaException(UserErrorCode.USER_NOT_FOUND));
 
         Post post = Post.create(
                 author,
@@ -37,6 +46,57 @@ public class PostApplicationService implements
                 command.tags()
         );
 
-        return postRepositoryPort.save(post);
+        Post savedPost = postRepositoryPort.save(post);
+
+        return  new CreatePostResult(
+                savedPost.getId(),
+                new CreatePostResult.Author(savedPost.getUser().getId(), savedPost.getUser().getUsername()),
+                savedPost.getTitle(),
+                savedPost.getContent(),
+                savedPost.getTags(),
+                savedPost.getCreatedAt(),
+                savedPost.getUpdatedAt()
+        );
+    }
+
+    @Override
+    public UpdatePostResult updatePost(UpdatePostCommand command) {
+        User auther = userRepositoryPort.findById(command.userId())
+                .orElseThrow(() -> new GamjaException(UserErrorCode.USER_NOT_FOUND)); // 짜피 걸릴 일 없음
+
+        Post post = postRepositoryPort.finfById(command.postId())
+                .orElseThrow(() -> new GamjaException(PostErrorCode.POST_NOT_FOUND));
+
+        if (!Objects.equals(post.getUser().getId(), auther.getId())) {
+            throw new GamjaException(GlobalErrorCode.FORBIDDEN);
+        }
+
+        Post newPost = Post.restore(
+                post.getId(),
+                post.getUser(),
+                command.title(),
+                command.content(),
+                command.tags(),
+                post.getViewCount(),
+                post.getHeartCount(),
+                post.getCommentCount(),
+                post.getCreatedAt(),
+                LocalDateTime.now()
+        );
+
+        Post updatedPost = postRepositoryPort.update(newPost);
+
+        return new UpdatePostResult(
+                updatedPost.getId(),
+                new UpdatePostResult.Author(updatedPost.getUser().getId(), updatedPost.getUser().getUsername()),
+                updatedPost.getTitle(),
+                updatedPost.getContent(),
+                updatedPost.getTags(),
+                updatedPost.getViewCount(),
+                updatedPost.getHeartCount(),
+                updatedPost.getCommentCount(),
+                updatedPost.getCreatedAt(),
+                updatedPost.getUpdatedAt()
+        );
     }
 }

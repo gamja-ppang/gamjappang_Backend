@@ -19,8 +19,10 @@ public class PostMapper {
                 userMapper.toEntity(post.getUser()),
                 post.getTitle(),
                 post.getContent(),
-                post.getViewCount(),
                 post.getTags(),
+                post.getViewCount(),
+                post.getHeartCount(),
+                post.getCommentCount(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
         );
@@ -32,8 +34,10 @@ public class PostMapper {
                 userMapper.toDomain(entity.getUser()),
                 entity.getTitle(),
                 entity.getContent(),
-                entity.getViewCount(),
                 entity.getTags(),
+                entity.getViewCount(),
+                entity.getHeartCount(),
+                entity.getCommentCount(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );

@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface PostRepositoryPort {
     Post save(Post post);
     Post update(Post post);
+    void delete(Long id);
 
     Optional<Post> finfById(Long id);
 }

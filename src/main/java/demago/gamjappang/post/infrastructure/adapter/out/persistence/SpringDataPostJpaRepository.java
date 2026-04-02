@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SpringDataPostJpaRepository extends JpaRepository<PostJpaEntity, Long> {
 
+    void delete(Long id);
 }

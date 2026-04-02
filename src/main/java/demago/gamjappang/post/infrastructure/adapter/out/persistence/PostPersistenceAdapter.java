@@ -35,6 +35,11 @@ public class PostPersistenceAdapter implements PostRepositoryPort {
     }
 
     @Override
+    public void delete(Long id) {
+        repository.delete(id);
+    }
+
+    @Override
     public Optional<Post> finfById(Long id) {
         return repository.findById(id).map(mapper::toDomain);
     }

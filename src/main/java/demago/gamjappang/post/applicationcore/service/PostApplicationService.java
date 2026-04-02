@@ -3,8 +3,10 @@ package demago.gamjappang.post.applicationcore.service;
 import demago.gamjappang.global.error.GlobalErrorCode;
 import demago.gamjappang.global.error.exception.GamjaException;
 import demago.gamjappang.post.applicationcore.port.in.CreatePostUseCase;
+import demago.gamjappang.post.applicationcore.port.in.DeletePostUseCase;
 import demago.gamjappang.post.applicationcore.port.in.UpdatePostUseCase;
 import demago.gamjappang.post.applicationcore.port.in.command.CreatePostCommand;
+import demago.gamjappang.post.applicationcore.port.in.command.DeletePostCommand;
 import demago.gamjappang.post.applicationcore.port.in.command.UpdatePostCommand;
 import demago.gamjappang.post.applicationcore.port.in.result.CreatePostResult;
 import demago.gamjappang.post.applicationcore.port.in.result.UpdatePostResult;
@@ -24,10 +26,12 @@ import java.util.Objects;
 @Transactional
 public class PostApplicationService implements
         CreatePostUseCase,
-        UpdatePostUseCase {
+        UpdatePostUseCase,
+        DeletePostUseCase {
 
     private final PostRepositoryPort postRepositoryPort;
     private final UserRepositoryPort userRepositoryPort;
+
 
     public PostApplicationService(PostRepositoryPort postRepositoryPort, UserRepositoryPort userRepositoryPort) {
         this.postRepositoryPort = postRepositoryPort;
@@ -98,5 +102,20 @@ public class PostApplicationService implements
                 updatedPost.getCreatedAt(),
                 updatedPost.getUpdatedAt()
         );
+    }
+
+    @Override
+    public void deletePost(DeletePostCommand command) {
+        User auther = userRepositoryPort.findById(command.userId())
+                .orElseThrow(() -> new GamjaException(UserErrorCode.USER_NOT_FOUND)); // 짜피 걸릴 일 없음
+
+        Post post = postRepositoryPort.finfById(command.postId())
+                .orElseThrow(() -> new GamjaException(PostErrorCode.POST_NOT_FOUND));
+
+        if (!Objects.equals(post.getUser().getId(), auther.getId())) {
+            throw new GamjaException(GlobalErrorCode.FORBIDDEN);
+        }
+
+        postRepositoryPort.delete(command.postId());
     }
 }

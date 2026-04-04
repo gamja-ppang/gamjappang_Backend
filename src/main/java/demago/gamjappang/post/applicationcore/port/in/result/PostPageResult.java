@@ -1,4 +1,4 @@
-가package demago.gamjappang.post.applicationcore.port.in.result;
+package demago.gamjappang.post.applicationcore.port.in.result;
 
 import java.util.List;
 

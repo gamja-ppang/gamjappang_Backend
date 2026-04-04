@@ -12,8 +12,7 @@ public record PostPageResponse(
         int totalPages,
         boolean hasNext
 ) {
-
-    public static PostPageResponse from(PostPageResult result) {
+정    public static PostPageResponse from(PostPageResult result) {
         return new PostPageResponse(
                 result.content().stream()
                         .map(PostSummary::from)

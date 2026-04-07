@@ -1,10 +1,9 @@
 package demago.gamjappang.post.infrastructure.adapter.out.persistence;
 
-import demago.gamjappang.post.applicationcore.port.in.result.CreatePostResult;
-import demago.gamjappang.post.applicationcore.port.in.result.UpdatePostResult;
 import demago.gamjappang.post.applicationcore.port.out.PostRepositoryPort;
 import demago.gamjappang.post.domain.model.Post;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -37,6 +36,27 @@ public class PostPersistenceAdapter implements PostRepositoryPort {
     @Override
     public void delete(Long id) {
         repository.delete(id);
+    }
+
+    @Override
+    public Page<Post> getPostPage(String tag, String keyword, Pageable pageable) {
+        String normalizedTag = normalize(tag);
+        String normalizedKeyword = normalize(keyword);
+
+        Page<PostJpaEntity> posts = repository.searchPosts(
+                normalizedTag,
+                normalizedKeyword,
+                pageable
+        );
+
+        return posts.map(mapper::toDomain);
+    }
+
+    private String normalize(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return value.trim();
     }
 
     @Override

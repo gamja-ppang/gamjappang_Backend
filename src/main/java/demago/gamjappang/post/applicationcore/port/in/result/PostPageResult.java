@@ -1,6 +1,7 @@
 package demago.gamjappang.post.applicationcore.port.in.result;
 
 import demago.gamjappang.post.domain.model.Post;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -13,15 +14,17 @@ public record PostPageResult(
         boolean hasNext
 ) {
 
-    public static PostPageResult from(List<Post> posts, int page, int size, long totalElements) {
-        List<PostSummary> content = posts.stream()
-                .map(PostSummary::from)
-                .toList();
-
-        int totalPages = (int) Math.ceil((double) totalElements / size);
-        boolean hasNext = page + 1 < totalPages;
-
-        return new PostPageResult(content, page, size, totalElements, totalPages, hasNext);
+    public static PostPageResult from(Page<Post> postPage) {
+        return new PostPageResult(
+                postPage.getContent().stream()
+                        .map(PostSummary::from)
+                        .toList(),
+                postPage.getNumber(),
+                postPage.getSize(),
+                postPage.getTotalElements(),
+                postPage.getTotalPages(),
+                postPage.hasNext()
+        );
     }
 
     public record PostSummary(

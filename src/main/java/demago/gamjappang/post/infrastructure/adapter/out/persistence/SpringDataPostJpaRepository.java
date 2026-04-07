@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface SpringDataPostJpaRepository extends JpaRepository<PostJpaEntity, Long> {
 
-    void delete(Long id);
+    void deleteById(Long id);
 
     @Query(
             value = """

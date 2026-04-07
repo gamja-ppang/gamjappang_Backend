@@ -35,7 +35,7 @@ public class PostPersistenceAdapter implements PostRepositoryPort {
 
     @Override
     public void delete(Long id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 
     @Override

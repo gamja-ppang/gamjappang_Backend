@@ -4,11 +4,14 @@ import demago.gamjappang.global.error.GlobalErrorCode;
 import demago.gamjappang.global.error.exception.GamjaException;
 import demago.gamjappang.post.applicationcore.port.in.CreatePostUseCase;
 import demago.gamjappang.post.applicationcore.port.in.DeletePostUseCase;
+import demago.gamjappang.post.applicationcore.port.in.PostPageUseCase;
 import demago.gamjappang.post.applicationcore.port.in.UpdatePostUseCase;
 import demago.gamjappang.post.applicationcore.port.in.command.CreatePostCommand;
 import demago.gamjappang.post.applicationcore.port.in.command.DeletePostCommand;
+import demago.gamjappang.post.applicationcore.port.in.command.PostPageCommand;
 import demago.gamjappang.post.applicationcore.port.in.command.UpdatePostCommand;
 import demago.gamjappang.post.applicationcore.port.in.result.CreatePostResult;
+import demago.gamjappang.post.applicationcore.port.in.result.PostPageResult;
 import demago.gamjappang.post.applicationcore.port.in.result.UpdatePostResult;
 import demago.gamjappang.post.applicationcore.port.out.PostRepositoryPort;
 import demago.gamjappang.post.domain.model.Post;
@@ -16,10 +19,13 @@ import demago.gamjappang.post.exception.PostErrorCode;
 import demago.gamjappang.user.applicationcore.port.out.UserRepositoryPort;
 import demago.gamjappang.user.domain.model.User;
 import demago.gamjappang.user.exception.UserErrorCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -27,7 +33,8 @@ import java.util.Objects;
 public class PostApplicationService implements
         CreatePostUseCase,
         UpdatePostUseCase,
-        DeletePostUseCase {
+        DeletePostUseCase,
+        PostPageUseCase {
 
     private final PostRepositoryPort postRepositoryPort;
     private final UserRepositoryPort userRepositoryPort;
@@ -52,14 +59,14 @@ public class PostApplicationService implements
 
         Post savedPost = postRepositoryPort.save(post);
 
-        return  new CreatePostResult(
-                savedPost.getId(),
-                new CreatePostResult.Author(savedPost.getUser().getId(), savedPost.getUser().getUsername()),
-                savedPost.getTitle(),
-                savedPost.getContent(),
-                savedPost.getTags(),
-                savedPost.getCreatedAt(),
-                savedPost.getUpdatedAt()
+        return new CreatePostResult(
+               savedPost.getId(),
+               new CreatePostResult.Author(savedPost.getUser().getId(), savedPost.getUser().getUsername()),
+               savedPost.getTitle(),
+               savedPost.getContent(),
+               savedPost.getTags(),
+               savedPost.getCreatedAt(),
+               savedPost.getUpdatedAt()
         );
     }
 
@@ -117,5 +124,12 @@ public class PostApplicationService implements
         }
 
         postRepositoryPort.delete(command.postId());
+    }
+
+    @Override
+    public PostPageResult getPostPage(PostPageCommand command) {
+        Page<Post> postList = postRepositoryPort.getPostPage(command.tag(), command.keyword(), command.pageable());
+
+        return PostPageResult.from(postList);
     }
 }

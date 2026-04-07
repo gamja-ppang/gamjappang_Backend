@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/v1/management/**"
                         ).hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((req, res, e) ->

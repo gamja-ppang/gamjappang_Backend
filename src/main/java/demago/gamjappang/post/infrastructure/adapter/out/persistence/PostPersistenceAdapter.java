@@ -21,16 +21,16 @@ public class PostPersistenceAdapter implements PostRepositoryPort {
 
     @Override
     public Post save(Post post) {
-        repository.save(mapper.toEntity(post));
+        PostJpaEntity savedPost = repository.save(mapper.toEntity(post));
 
-        return post;
+        return mapper.toDomain(savedPost);
     }
 
     @Override
     public Post update(Post post) {
-        repository.save(mapper.toEntity(post));
+        PostJpaEntity updatedPost = repository.save(mapper.toEntity(post));
 
-        return post;
+        return mapper.toDomain(updatedPost);
     }
 
     @Override

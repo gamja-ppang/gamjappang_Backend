@@ -41,7 +41,7 @@ public record PostPageResponse(
             return new PostSummary(
                     result.id(),
                     result.title(),
-                    Author.from(result.author()),
+                    Author.from(result),
                     result.summation(),
                     result.tags(),
                     result.viewCount(),

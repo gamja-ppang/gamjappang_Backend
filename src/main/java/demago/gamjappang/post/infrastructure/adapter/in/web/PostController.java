@@ -57,11 +57,11 @@ public class PostController {
 
     @PatchMapping("/{postId}")
     public ResponseEntity<UpdatePostResponse> updatePost(
-            @Valid @RequestBody UpdatePostRequest requset,
+            @Valid @RequestBody UpdatePostRequest request,
             @AuthenticationPrincipal UserPrincipal user,
             @PathVariable Long postId
     ) {
-        UpdatePostCommand command = requset.toUpdateCommand(user.getId(), postId);
+        UpdatePostCommand command = request.toUpdateCommand(user.getId(), postId);
         UpdatePostResult result = updatePostUseCase.updatePost(command);
         return ResponseEntity.ok(UpdatePostResponse.from(result));
     }

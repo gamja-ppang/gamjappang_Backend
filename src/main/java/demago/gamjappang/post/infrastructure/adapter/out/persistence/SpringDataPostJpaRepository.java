@@ -14,27 +14,23 @@ public interface SpringDataPostJpaRepository extends JpaRepository<PostJpaEntity
 
     @Query(
             value = """
-                    select distinct p
-                    from PostJpaEntity p
-                    left join p.tags t
-                    where (:tag is null or t = :tag)
-                      and (
-                            :keyword is null
-                            or p.title like concat('%', :keyword, '%')
-                            or p.content like concat('%', :keyword, '%')
-                          )
-                    """,
+        select p
+        from PostJpaEntity p
+        where (:tag is null or :tag member of p.tags)
+          and (
+                :keyword is null
+                or p.title like concat('%', :keyword, '%')
+              )
+        """,
             countQuery = """
-                    select count(distinct p)
-                    from PostJpaEntity p
-                    left join p.tags t
-                    where (:tag is null or t = :tag)
-                      and (
-                            :keyword is null
-                            or p.title like concat('%', :keyword, '%')
-                            or p.content like concat('%', :keyword, '%')
-                          )
-                    """
+        select count(p)
+        from PostJpaEntity p
+        where (:tag is null or :tag member of p.tags)
+          and (
+                :keyword is null
+                or p.title like concat('%', :keyword, '%')
+              )
+        """
     )
     Page<PostJpaEntity> searchPosts(
             @Param("tag") String tag,

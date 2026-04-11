@@ -1,9 +1,16 @@
 package demago.gamjappang.global.feignclient.webhook;
 
+import demago.gamjappang.global.feignclient.webhook.dto.Embed;
+import demago.gamjappang.global.feignclient.webhook.dto.Field;
+import demago.gamjappang.global.feignclient.webhook.dto.Footer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -12,33 +19,39 @@ public class SendService {
 
     private final DiscordWebhookClient discordWebhookClient;
 
-    @Async("discordAsyncExecutor") // 비동기처리
+    @Async("discordAsyncExecutor")
     public void sendDiscordAlert(Exception e, String method, String uri) {
         try {
-            String message = buildMessage(e, method, uri);
-            discordWebhookClient.send(
-                    new DiscordWebhookRequest(message)
-            );
+            DiscordWebhookRequest request = buildMessage(e, method, uri);
+            discordWebhookClient.send(request);
         } catch (Exception ex) {
             log.error("Failed to send discord webhook", ex);
         }
     }
 
-    public String buildMessage(Exception e, String method, String uri) {
-        String errorMessage = """
-            ## Internal Server Error
-            - Method: `%s`
-            - URI: `%s`
-            - %s: %s
-            """.formatted(method, uri, e.getClass().getSimpleName(),
-                e.getMessage() != null ? e.getMessage() : "(no message)");
+    public DiscordWebhookRequest buildMessage(Exception e, String method, String uri) {
+        String timestamp = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
+        String exceptionName = e.getClass().getSimpleName();
+        String exceptionMessage = e.getMessage() != null ? e.getMessage() : "(no message)";
 
-        // 2000자 이상이면 자름
-        if (errorMessage.length() > 2000) {
-            return errorMessage.substring(0, 1990) + "\n... (중략)";
+        if (exceptionMessage.length() > 1000) {
+            exceptionMessage = exceptionMessage.substring(0, 990) + "\n... (중략)";
         }
 
-        return errorMessage;
+        Embed embed = new Embed(
+                "🚨 Internal Server Error",
+                15158332,
+                List.of(
+                        new Field("Method", "`" + method + "`", true),
+                        new Field("URI", "`" + uri + "`", true),
+                        new Field("Exception", "`" + exceptionName + "`", false),
+                        new Field("Message", "```text\n" + exceptionMessage + "\n```", false)
+                ),
+                new Footer(timestamp)
+        );
+
+        return new DiscordWebhookRequest(null, List.of(embed));
     }
 }

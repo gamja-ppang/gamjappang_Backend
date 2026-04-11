@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -71,7 +70,7 @@ public class PostApplicationService implements
         User auther = userRepositoryPort.findById(command.userId())
                 .orElseThrow(() -> new GamjaException(UserErrorCode.USER_NOT_FOUND)); // 짜피 걸릴 일 없음
 
-        Post post = postRepositoryPort.finfById(command.postId())
+        Post post = postRepositoryPort.findById(command.postId())
                 .orElseThrow(() -> new GamjaException(PostErrorCode.POST_NOT_FOUND));
 
         if (!Objects.equals(post.getUser().getId(), auther.getId())) {
@@ -112,7 +111,7 @@ public class PostApplicationService implements
         User auther = userRepositoryPort.findById(command.userId())
                 .orElseThrow(() -> new GamjaException(UserErrorCode.USER_NOT_FOUND)); // 짜피 걸릴 일 없음
 
-        Post post = postRepositoryPort.finfById(command.postId())
+        Post post = postRepositoryPort.findById(command.postId())
                 .orElseThrow(() -> new GamjaException(PostErrorCode.POST_NOT_FOUND));
 
         if (!Objects.equals(post.getUser().getId(), auther.getId())) {
@@ -131,7 +130,7 @@ public class PostApplicationService implements
 
     @Override
     public GetPostResult getPost(GetPostCommand command) {
-        Post post = postRepositoryPort.finfById(command.postId())
+        Post post = postRepositoryPort.findById(command.postId())
                 .orElseThrow(() -> new GamjaException(PostErrorCode.POST_NOT_FOUND));
 
         return new GetPostResult(

@@ -60,7 +60,7 @@ public class PostPersistenceAdapter implements PostRepositoryPort {
     }
 
     @Override
-    public Optional<Post> finfById(Long id) {
+    public Optional<Post> findById(Long id) {
         return repository.findById(id).map(mapper::toDomain);
     }
 }

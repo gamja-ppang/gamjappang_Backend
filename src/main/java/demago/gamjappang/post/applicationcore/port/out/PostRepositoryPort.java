@@ -1,7 +1,5 @@
 package demago.gamjappang.post.applicationcore.port.out;
 
-import demago.gamjappang.post.applicationcore.port.in.result.CreatePostResult;
-import demago.gamjappang.post.applicationcore.port.in.result.UpdatePostResult;
 import demago.gamjappang.post.domain.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,5 +13,5 @@ public interface PostRepositoryPort {
 
     Page<Post> getPostPage(String tag, String keyword, Pageable pageable);
 
-    Optional<Post> finfById(Long id);
+    Optional<Post> findById(Long id);
 }

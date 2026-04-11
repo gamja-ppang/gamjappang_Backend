@@ -1,5 +1,7 @@
 package demago.gamjappang.post.applicationcore.port.in.result;
 
+import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.common.Author;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,9 +17,4 @@ public record UpdatePostResult(
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-    public record Author(
-            Long id,
-            String name
-    ) {
-    }
 }

@@ -1,6 +1,7 @@
 package demago.gamjappang.post.applicationcore.port.in.result;
 
 import demago.gamjappang.post.domain.model.Post;
+import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.common.Author;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -64,18 +65,6 @@ public record PostPageResult(
             }
 
             return normalized.substring(0, maxLength) + "...";
-        }
-
-        public record Author(
-                Long id,
-                String name
-        ) {
-            public static Author from(Post post) {
-                return new Author(
-                        post.getUser().getId(),
-                        post.getUser().getUsername()
-                );
-            }
         }
     }
 }

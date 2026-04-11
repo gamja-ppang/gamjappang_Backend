@@ -40,7 +40,8 @@ public class Post {
     }
 
     public static Post create(User user, String title, String content, List<String> tags) {
-        return new Post(null, user, title, content, tags, 0, 0, 0, LocalDateTime.now(), LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
+        return new Post(null, user, title, content, tags, 0, 0, 0, now, now);
     }
 
     public static Post restore(Long id, User user, String title, String content, List<String> tags, int viewCount, int heartCount, int commentCount, LocalDateTime createdAt, LocalDateTime updatedAt) {

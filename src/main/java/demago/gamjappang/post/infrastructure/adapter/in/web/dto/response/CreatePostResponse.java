@@ -19,7 +19,7 @@ public record CreatePostResponse(
     public static CreatePostResponse from(CreatePostResult result) {
         return new CreatePostResponse(
                 result.id(),
-                Author.from(result.author()),
+                Author.from(result),
                 result.title(),
                 result.content(),
                 result.tags(),

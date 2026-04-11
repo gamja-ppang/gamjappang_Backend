@@ -3,7 +3,9 @@ package demago.gamjappang.global.error.handler;
 import demago.gamjappang.global.error.ErrorResponse;
 import demago.gamjappang.global.error.GlobalErrorCode;
 import demago.gamjappang.global.error.exception.GamjaException;
+import demago.gamjappang.global.feignclient.webhook.SendService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -22,12 +24,21 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+    private final SendService sendService;
 
     @ExceptionHandler(GamjaException.class)
     public ResponseEntity<ErrorResponse> handleGamjaException(GamjaException e, HttpServletRequest request) {
         var ec = e.getErrorCode();
         String message = e.getMessage() != null ? e.getMessage() : ec.getMessage();
+
+        try {
+            sendService.sendDiscordAlert(e, request.getMethod(), request.getRequestURI());
+        } catch (Exception ex) {
+            log.warn("Discord 알림 전송 실패", ex);
+        }
 
         return ResponseEntity
                 .status(ec.getStatus())
@@ -78,6 +89,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUnexpected(Exception e, HttpServletRequest request) {
         // 서버 로그에만 스택 트레이스 남기고, 응답은 안전하게
         log.error("Unexpected exception: {} {}", request.getMethod(), request.getRequestURI(), e);
+        sendService.sendDiscordAlert(e, request.getMethod(), request.getRequestURI());
 
         return ResponseEntity
                 .status(GlobalErrorCode.INTERNAL_SERVER_ERROR.getStatus())

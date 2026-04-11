@@ -1,6 +1,7 @@
 package demago.gamjappang.post.infrastructure.adapter.in.web.dto.response;
 
 import demago.gamjappang.post.applicationcore.port.in.result.PostPageResult;
+import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.common.Author;
 
 import java.util.List;
 
@@ -47,18 +48,6 @@ public record PostPageResponse(
                     result.likeCount(),
                     result.commentCount()
             );
-        }
-
-        public record Author(
-                Long id,
-                String name
-        ) {
-            public static Author from(PostPageResult.PostSummary.Author result) {
-                return new Author(
-                        result.id(),
-                        result.name()
-                );
-            }
         }
     }
 }

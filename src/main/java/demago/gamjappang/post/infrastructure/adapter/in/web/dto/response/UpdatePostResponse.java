@@ -2,6 +2,7 @@ package demago.gamjappang.post.infrastructure.adapter.in.web.dto.response;
 
 import demago.gamjappang.post.applicationcore.port.in.result.CreatePostResult;
 import demago.gamjappang.post.applicationcore.port.in.result.UpdatePostResult;
+import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.common.Author;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,17 +32,5 @@ public record UpdatePostResponse(
                 result.createdAt(),
                 result.updatedAt()
         );
-    }
-
-    public record Author(
-            Long id,
-            String name
-    ) {
-        public static Author from(UpdatePostResult.Author author) {
-            return new Author(
-                    author.id(),
-                    author.name()
-            );
-        }
     }
 }

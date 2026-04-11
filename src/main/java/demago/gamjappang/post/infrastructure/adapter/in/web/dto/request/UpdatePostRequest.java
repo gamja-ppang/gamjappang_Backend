@@ -1,12 +1,11 @@
 package demago.gamjappang.post.infrastructure.adapter.in.web.dto.request;
 
-import demago.gamjappang.post.applicationcore.port.in.command.CreatePostCommand;
 import demago.gamjappang.post.applicationcore.port.in.command.UpdatePostCommand;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
-public record UpdatePostRequset (
+public record UpdatePostRequest(
 
         @NotBlank String title,
         @NotBlank String content,

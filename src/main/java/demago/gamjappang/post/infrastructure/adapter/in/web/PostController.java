@@ -13,15 +13,13 @@ import demago.gamjappang.post.applicationcore.port.in.result.CreatePostResult;
 import demago.gamjappang.post.applicationcore.port.in.result.GetPostResult;
 import demago.gamjappang.post.applicationcore.port.in.result.PostPageResult;
 import demago.gamjappang.post.applicationcore.port.in.result.UpdatePostResult;
-import demago.gamjappang.post.domain.model.Post;
 import demago.gamjappang.post.infrastructure.adapter.in.web.dto.request.CreatePostRequest;
-import demago.gamjappang.post.infrastructure.adapter.in.web.dto.request.UpdatePostRequset;
+import demago.gamjappang.post.infrastructure.adapter.in.web.dto.request.UpdatePostRequest;
 import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.CreatePostResponse;
 import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.GetPostResponse;
 import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.PostPageResponse;
 import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.UpdatePostResponse;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -59,7 +57,7 @@ public class PostController {
 
     @PatchMapping("/{postId}")
     public ResponseEntity<UpdatePostResponse> updatePost(
-            @Valid @RequestBody UpdatePostRequset requset,
+            @Valid @RequestBody UpdatePostRequest requset,
             @AuthenticationPrincipal UserPrincipal user,
             @PathVariable Long postId
     ) {

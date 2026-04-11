@@ -1,6 +1,6 @@
 package demago.gamjappang.post.applicationcore.port.in.result;
 
-import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.common.Author;
+import demago.gamjappang.post.applicationcore.port.in.result.common.Author;
 
 import java.time.LocalDateTime;
 import java.util.List;

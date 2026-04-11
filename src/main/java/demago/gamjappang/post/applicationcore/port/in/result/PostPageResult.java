@@ -1,7 +1,7 @@
 package demago.gamjappang.post.applicationcore.port.in.result;
 
+가import demago.gamjappang.post.applicationcore.port.in.result.common.Author;
 import demago.gamjappang.post.domain.model.Post;
-import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.common.Author;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

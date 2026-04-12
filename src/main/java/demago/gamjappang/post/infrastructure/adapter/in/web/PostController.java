@@ -64,12 +64,12 @@ public class PostController {
         return ResponseEntity.ok(UpdatePostResponse.from(result));
     }
 
-    @DeleteMapping("/{postid}")
-    public ResponseEntity<Void> deletePodt(
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(
             @AuthenticationPrincipal UserPrincipal user,
-            @PathVariable Long postid
+            @PathVariable Long postId
     ) {
-        DeletePostCommand command = new DeletePostCommand(postid, user.getId());
+        DeletePostCommand command = new DeletePostCommand(postId, user.getId());
         deletePostUseCase.deletePost(command);
 
         return ResponseEntity.noContent().build();

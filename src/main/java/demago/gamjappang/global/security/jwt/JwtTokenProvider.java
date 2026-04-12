@@ -1,10 +1,10 @@
 package demago.gamjappang.global.security.jwt;
 
 import demago.gamjappang.global.error.exception.GamjaException;
-import demago.gamjappang.user.applicationcore.port.out.TokenPort;
-import demago.gamjappang.user.domain.model.Role;
-import demago.gamjappang.user.domain.model.User;
-import demago.gamjappang.user.exception.JwtErrorCode;
+import demago.gamjappang.domain.user.applicationcore.port.out.TokenPort;
+import demago.gamjappang.domain.user.domain.model.Role;
+import demago.gamjappang.domain.user.domain.model.User;
+import demago.gamjappang.domain.user.exception.JwtErrorCode;
 import demago.gamjappang.global.security.userdetails.UserPrincipal;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

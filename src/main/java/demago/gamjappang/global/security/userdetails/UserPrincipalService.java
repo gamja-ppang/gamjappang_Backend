@@ -1,7 +1,7 @@
 package demago.gamjappang.global.security.userdetails;
 
-import demago.gamjappang.user.applicationcore.port.out.UserRepositoryPort;
-import demago.gamjappang.user.exception.UserErrorCode;
+import demago.gamjappang.domain.user.applicationcore.port.out.UserRepositoryPort;
+import demago.gamjappang.domain.user.exception.UserErrorCode;
 import demago.gamjappang.global.error.exception.GamjaException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

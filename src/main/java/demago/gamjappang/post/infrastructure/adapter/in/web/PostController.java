@@ -59,7 +59,7 @@ public class PostController {
             @AuthenticationPrincipal UserPrincipal user,
             @PathVariable Long postId
     ) {
-        UpdatePostCommand command = request.toUpdateCommand(user.getId(), postId);
+        UpdatePostCommand command = request.toUpdateCommand(postId, user.getId());
         UpdatePostResult result = updatePostUseCase.updatePost(command);
         return ResponseEntity.ok(UpdatePostResponse.from(result));
     }
@@ -81,16 +81,12 @@ public class PostController {
             @RequestParam(required = false) String tag,
             Pageable pageable
     ) {
-        Sort.Order order = pageable.getSort().getOrderFor("createdAt");
+        Sort.Order order = pageable.getSort().isSorted()
+                ? pageable.getSort().iterator().next()
+                : Sort.Order.desc("createdAt");
 
-        String sortBy = "createdAt";
-        String direction = "desc";
-
-        if (order != null) {
-            sortBy = order.getProperty();
-            direction = order.getDirection().name();
-        }
-
+                String sortBy = order.getProperty();
+                String direction = order.getDirection().name();
 
         PostPageCommand command = new PostPageCommand(
                 keyword,

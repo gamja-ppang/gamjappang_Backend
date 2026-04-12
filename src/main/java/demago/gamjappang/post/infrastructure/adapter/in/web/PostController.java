@@ -1,14 +1,8 @@
 package demago.gamjappang.post.infrastructure.adapter.in.web;
 
 import demago.gamjappang.global.security.userdetails.UserPrincipal;
-import demago.gamjappang.post.applicationcore.port.in.CreatePostUseCase;
-import demago.gamjappang.post.applicationcore.port.in.GetPostUseCase;
-import demago.gamjappang.post.applicationcore.port.in.PostPageUseCase;
-import demago.gamjappang.post.applicationcore.port.in.UpdatePostUseCase;
-import demago.gamjappang.post.applicationcore.port.in.command.CreatePostCommand;
-import demago.gamjappang.post.applicationcore.port.in.command.GetPostCommand;
-import demago.gamjappang.post.applicationcore.port.in.command.PostPageCommand;
-import demago.gamjappang.post.applicationcore.port.in.command.UpdatePostCommand;
+import demago.gamjappang.post.applicationcore.port.in.*;
+import demago.gamjappang.post.applicationcore.port.in.command.*;
 import demago.gamjappang.post.applicationcore.port.in.result.CreatePostResult;
 import demago.gamjappang.post.applicationcore.port.in.result.GetPostResult;
 import demago.gamjappang.post.applicationcore.port.in.result.PostPageResult;
@@ -32,16 +26,19 @@ public class PostController {
 
     private final CreatePostUseCase createPostUseCase;
     private final UpdatePostUseCase updatePostUseCase;
+    private final DeletePostUseCase deletePostUseCase;
     private final PostPageUseCase postPageUseCase;
     private final GetPostUseCase getPostUseCase;
 
     public PostController(
             CreatePostUseCase createPostUseCase,
             UpdatePostUseCase updatePostUseCase,
+            DeletePostUseCase deletePostUseCase,
             PostPageUseCase postPageUseCase,
             GetPostUseCase getPostUseCase) {
         this.createPostUseCase = createPostUseCase;
         this.updatePostUseCase = updatePostUseCase;
+        this.deletePostUseCase = deletePostUseCase;
         this.postPageUseCase = postPageUseCase;
         this.getPostUseCase = getPostUseCase;
     }
@@ -65,6 +62,17 @@ public class PostController {
         UpdatePostCommand command = request.toUpdateCommand(user.getId(), postId);
         UpdatePostResult result = updatePostUseCase.updatePost(command);
         return ResponseEntity.ok(UpdatePostResponse.from(result));
+    }
+
+    @DeleteMapping("/{postid}")
+    public ResponseEntity<Void> deletePodt(
+            @AuthenticationPrincipal UserPrincipal user,
+            @PathVariable Long postid
+    ) {
+        DeletePostCommand command = new DeletePostCommand(postid, user.getId());
+        deletePostUseCase.deletePost(command);
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping()

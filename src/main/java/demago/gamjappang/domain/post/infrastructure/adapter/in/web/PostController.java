@@ -3,8 +3,6 @@ package demago.gamjappang.domain.post.infrastructure.adapter.in.web;
 import demago.gamjappang.domain.post.applicationcore.port.in.*;
 import demago.gamjappang.domain.post.applicationcore.port.in.command.*;
 import demago.gamjappang.global.security.userdetails.UserPrincipal;
-import demago.gamjappang.post.applicationcore.port.in.*;
-import demago.gamjappang.post.applicationcore.port.in.command.*;
 import demago.gamjappang.domain.post.applicationcore.port.in.result.CreatePostResult;
 import demago.gamjappang.domain.post.applicationcore.port.in.result.GetPostResult;
 import demago.gamjappang.domain.post.applicationcore.port.in.result.PostPageResult;

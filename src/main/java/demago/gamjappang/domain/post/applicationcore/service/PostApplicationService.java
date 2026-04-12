@@ -4,8 +4,6 @@ import demago.gamjappang.domain.post.applicationcore.port.in.*;
 import demago.gamjappang.domain.post.applicationcore.port.in.command.*;
 import demago.gamjappang.global.error.GlobalErrorCode;
 import demago.gamjappang.global.error.exception.GamjaException;
-import demago.gamjappang.post.applicationcore.port.in.*;
-import demago.gamjappang.post.applicationcore.port.in.command.*;
 import demago.gamjappang.domain.post.applicationcore.port.in.result.CreatePostResult;
 import demago.gamjappang.domain.post.applicationcore.port.in.result.GetPostResult;
 import demago.gamjappang.domain.post.applicationcore.port.in.result.PostPageResult;

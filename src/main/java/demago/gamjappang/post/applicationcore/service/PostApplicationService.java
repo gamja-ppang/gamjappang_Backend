@@ -123,7 +123,7 @@ public class PostApplicationService implements
 
     @Override
     public PostPageResult getPostPage(PostPageCommand command) {
-        Page<Post> postList = postRepositoryPort.getPostPage(command.tag(), command.keyword(), command.pageable());
+        Page<Post> postList = postRepositoryPort.getPostPage(command.tag(), command.keyword(), command.page(), command.size(), command.sortBy(), command.direction());
 
         return PostPageResult.from(postList);
     }

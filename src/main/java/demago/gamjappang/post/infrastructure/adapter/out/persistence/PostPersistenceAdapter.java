@@ -3,10 +3,14 @@ package demago.gamjappang.post.infrastructure.adapter.out.persistence;
 import demago.gamjappang.post.applicationcore.port.out.PostRepositoryPort;
 import demago.gamjappang.post.domain.model.Post;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.StringTokenizer;
 
 @Component
 public class PostPersistenceAdapter implements PostRepositoryPort {
@@ -39,7 +43,13 @@ public class PostPersistenceAdapter implements PostRepositoryPort {
     }
 
     @Override
-    public Page<Post> getPostPage(String tag, String keyword, Pageable pageable) {
+    public Page<Post> getPostPage(String tag, String keyword, int page, int size, String sortBy, String direction) {
+        Sort sort = "desc".equalsIgnoreCase(direction)
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
         String normalizedTag = normalize(tag);
         String normalizedKeyword = normalize(keyword);
 
@@ -51,6 +61,20 @@ public class PostPersistenceAdapter implements PostRepositoryPort {
 
         return posts.map(mapper::toDomain);
     }
+
+//    @Override
+//    public Page<Post> getPostPage(String tag, String keyword, Pageable pageable) {
+//        String normalizedTag = normalize(tag);
+//        String normalizedKeyword = normalize(keyword);
+//
+//        Page<PostJpaEntity> posts = repository.searchPosts(
+//                normalizedTag,
+//                normalizedKeyword,
+//                pageable
+//        );
+//
+//        return posts.map(mapper::toDomain);
+//    }
 
     private String normalize(String value) {
         if (value == null || value.isBlank()) {

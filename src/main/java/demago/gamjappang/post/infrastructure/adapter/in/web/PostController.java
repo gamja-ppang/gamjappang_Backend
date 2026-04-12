@@ -21,6 +21,7 @@ import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.PostPag
 import demago.gamjappang.post.infrastructure.adapter.in.web.dto.response.UpdatePostResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -72,7 +73,26 @@ public class PostController {
             @RequestParam(required = false) String tag,
             Pageable pageable
     ) {
-        PostPageCommand command = new PostPageCommand(keyword, tag, pageable);
+        Sort.Order order = pageable.getSort().getOrderFor("createdAt");
+
+        String sortBy = "createdAt";
+        String direction = "desc";
+
+        if (order != null) {
+            sortBy = order.getProperty();
+            direction = order.getDirection().name();
+        }
+
+
+        PostPageCommand command = new PostPageCommand(
+                keyword,
+                tag,
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                sortBy,
+                direction
+        );
+
         PostPageResult result = postPageUseCase.getPostPage(command);
 
         return ResponseEntity.ok(PostPageResponse.from(result));

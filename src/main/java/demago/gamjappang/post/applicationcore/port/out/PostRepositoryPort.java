@@ -11,7 +11,7 @@ public interface PostRepositoryPort {
     Post update(Post post);
     void delete(Long id);
 
-    Page<Post> getPostPage(String tag, String keyword, Pageable pageable);
+    Page<Post> getPostPage(String tag, String keyword, int page, int size, String sortBy, String direction);
 
     Optional<Post> findById(Long id);
 }

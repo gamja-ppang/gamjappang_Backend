@@ -38,17 +38,14 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/v1/auth/join",
-                                "/api/v1/auth/code/**",
-                                "/api/v1/auth/login",
-                                "/api/v1/auth/social",
-                                "/api/v1/auth/refresh"
+                                "/api/v1/auth/**",
+                                "/api/v1/post/**"
                         ).permitAll()
 
                         .requestMatchers(
                                 "/api/v1/management/**"
                         ).hasRole("ADMIN")
-                        .anyRequest().permitAll()
+                        .anyRequest().notifyAll()
                 )
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((req, res, e) ->

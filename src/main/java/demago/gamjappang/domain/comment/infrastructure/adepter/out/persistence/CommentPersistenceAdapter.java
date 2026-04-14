@@ -2,9 +2,11 @@ package demago.gamjappang.domain.comment.infrastructure.adepter.out.persistence;
 
 import demago.gamjappang.domain.comment.applicationcore.port.out.CommentRepositoryPort;
 import demago.gamjappang.domain.comment.domain.model.Comment;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class CommentPersistenceAdapter implements CommentRepositoryPort {
 
     private final SpringDataCommentRepository repository;

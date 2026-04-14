@@ -8,4 +8,6 @@ public interface CommentRepositoryPort {
     void save(Comment comment);
 
     void delete(Long id);
+
+    List<Comment> findByPostId(Long postId);
 }

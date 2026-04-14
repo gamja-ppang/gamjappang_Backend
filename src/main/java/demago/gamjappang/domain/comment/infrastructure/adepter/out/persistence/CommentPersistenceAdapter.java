@@ -24,4 +24,11 @@ public class CommentPersistenceAdapter implements CommentRepositoryPort {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public List<Comment> findByPostId(Long postId) {
+        List<CommentJpaEntity> comments = repository.findByPostId(postId);
+
+        return comments.stream().map(mapper::toDomain).toList();
+    }
 }

@@ -46,7 +46,7 @@ public class Comment {
     }
 
     private static void validateContent(String content) {
-        if (content == null || content.isBlank()) {
+        if (content == null || content.isBlank() || content.length() > 250) {
             throw new GamjaException(GlobalErrorCode.INVALID_REQUEST);
         }
     }

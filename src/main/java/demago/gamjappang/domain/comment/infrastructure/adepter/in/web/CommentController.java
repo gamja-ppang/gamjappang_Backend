@@ -2,8 +2,10 @@ package demago.gamjappang.domain.comment.infrastructure.adepter.in.web;
 
 import demago.gamjappang.domain.comment.applicationcore.port.in.CommentListUseCase;
 import demago.gamjappang.domain.comment.applicationcore.port.in.CreateCommentUseCase;
+import demago.gamjappang.domain.comment.applicationcore.port.in.DeleteCommentUseCase;
 import demago.gamjappang.domain.comment.applicationcore.port.in.command.CommentListCommand;
 import demago.gamjappang.domain.comment.applicationcore.port.in.command.CreateCommentCommand;
+import demago.gamjappang.domain.comment.applicationcore.port.in.command.DeleteCommentCommand;
 import demago.gamjappang.domain.comment.applicationcore.port.in.result.CommentListResult;
 import demago.gamjappang.domain.comment.infrastructure.adepter.in.web.dto.request.CreateCommentRequest;
 import demago.gamjappang.domain.comment.infrastructure.adepter.in.web.dto.response.CommentListResponse;
@@ -19,13 +21,16 @@ public class CommentController {
 
     private final CreateCommentUseCase createCommentUseCase;
     private final CommentListUseCase commentListUseCase;
+    private final DeleteCommentUseCase deleteCommentUseCase;
 
     public CommentController(
             CreateCommentUseCase createCommentUseCase,
-            CommentListUseCase commentListUseCase
+            CommentListUseCase commentListUseCase,
+            DeleteCommentUseCase deleteCommentUseCase
     ) {
         this.createCommentUseCase = createCommentUseCase;
         this.commentListUseCase = commentListUseCase;
+        this.deleteCommentUseCase = deleteCommentUseCase;
     }
 
     @PostMapping
@@ -45,5 +50,15 @@ public class CommentController {
         CommentListResult result = commentListUseCase.getCommentList(new CommentListCommand(postId));
 
         return ResponseEntity.ok(CommentListResponse.from(result));
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+            @AuthenticationPrincipal UserPrincipal user,
+            @PathVariable Long commentId
+    ) {
+        deleteCommentUseCase.deleteComment(new DeleteCommentCommand(user.getId(), commentId));
+
+        return ResponseEntity.noContent().build();
     }
 }

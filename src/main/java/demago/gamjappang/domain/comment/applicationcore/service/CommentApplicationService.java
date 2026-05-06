@@ -1,7 +1,10 @@
 package demago.gamjappang.domain.comment.applicationcore.service;
 
+import demago.gamjappang.domain.comment.applicationcore.port.in.CommentListUseCase;
 import demago.gamjappang.domain.comment.applicationcore.port.in.CreateCommentUseCase;
+import demago.gamjappang.domain.comment.applicationcore.port.in.command.CommentListCommand;
 import demago.gamjappang.domain.comment.applicationcore.port.in.command.CreateCommentCommand;
+import demago.gamjappang.domain.comment.applicationcore.port.in.result.CommentListResult;
 import demago.gamjappang.domain.comment.applicationcore.port.out.CommentRepositoryPort;
 import demago.gamjappang.domain.comment.domain.model.Comment;
 import demago.gamjappang.domain.post.applicationcore.port.out.PostRepositoryPort;
@@ -18,7 +21,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class CommentApplicationService implements
-        CreateCommentUseCase {
+        CreateCommentUseCase,
+        CommentListUseCase {
 
     private final CommentRepositoryPort commentRepositoryPort;
     private final PostRepositoryPort postRepositoryPort;
@@ -45,5 +49,13 @@ public class CommentApplicationService implements
         );
 
         commentRepositoryPort.save(comment);
+    }
+
+    @Override
+    public CommentListResult getCommentList(CommentListCommand command) {
+        Post post = postRepositoryPort.findById(command.postId())
+                .orElseThrow(() -> new GamjaException(PostErrorCode.POST_NOT_FOUND));
+
+        return CommentListResult.from(commentRepositoryPort.findByPostId(post.getId()));
     }
 }

@@ -7,7 +7,9 @@ import demago.gamjappang.domain.post.infrastructure.adapter.out.persistence.Post
 import demago.gamjappang.domain.user.domain.model.User;
 import demago.gamjappang.domain.user.infrastructure.adapter.out.persistence.UserJpaEntity;
 import demago.gamjappang.domain.user.infrastructure.adapter.out.persistence.UserMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CommentMapper {
 
     private final PostMapper postMapper;

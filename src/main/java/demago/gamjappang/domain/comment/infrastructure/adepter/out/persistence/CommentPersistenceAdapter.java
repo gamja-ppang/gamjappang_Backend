@@ -5,6 +5,7 @@ import demago.gamjappang.domain.comment.domain.model.Comment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CommentPersistenceAdapter implements CommentRepositoryPort {
@@ -28,8 +29,13 @@ public class CommentPersistenceAdapter implements CommentRepositoryPort {
     }
 
     @Override
+    public Optional<Comment> findById(Long id) {
+        return repository.findById(id).map(mapper::toDomain);
+    }
+
+    @Override
     public List<Comment> findByPostId(Long postId) {
-        List<CommentJpaEntity> comments = repository.findByPostId(postId);
+        List<CommentJpaEntity> comments = repository.findByPost_IdOrderByCreatedAtDesc(postId);
 
         return comments.stream().map(mapper::toDomain).toList();
     }

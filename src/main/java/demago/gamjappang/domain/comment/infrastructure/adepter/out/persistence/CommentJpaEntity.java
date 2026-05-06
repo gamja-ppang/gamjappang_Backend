@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "comment")
+@Table(name = "comments")
 public class CommentJpaEntity {
 
     @Id
@@ -22,9 +22,10 @@ public class CommentJpaEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserJpaEntity user;
 
+    @Column(nullable = false, length = 250)
     private String content;
 
-    @Column(name = "create_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public CommentJpaEntity() {

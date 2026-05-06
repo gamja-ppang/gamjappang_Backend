@@ -56,6 +56,7 @@ public class CommentApplicationService implements
         );
 
         commentRepositoryPort.save(comment);
+        updateCommentCount(post, 1);
     }
 
     @Override
@@ -79,5 +80,25 @@ public class CommentApplicationService implements
         }
 
         commentRepositoryPort.delete(command.commentId());
+        updateCommentCount(comment.getPost(), -1);
+    }
+
+    private void updateCommentCount(Post post, int delta) {
+        int nextCommentCount = Math.max(0, post.getCommentCount() + delta);
+
+        Post updatedPost = Post.restore(
+                post.getId(),
+                post.getUser(),
+                post.getTitle(),
+                post.getContent(),
+                post.getTags(),
+                post.getViewCount(),
+                post.getHeartCount(),
+                nextCommentCount,
+                post.getCreatedAt(),
+                post.getUpdatedAt()
+        );
+
+        postRepositoryPort.update(updatedPost);
     }
 }

@@ -1,7 +1,7 @@
 package demago.gamjappang.global.security.userdetails;
 
-import demago.gamjappang.user.domain.model.Role;
-import demago.gamjappang.user.domain.model.User;
+import demago.gamjappang.domain.user.domain.model.Role;
+import demago.gamjappang.domain.user.domain.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

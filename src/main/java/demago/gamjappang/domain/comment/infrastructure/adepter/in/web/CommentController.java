@@ -1,0 +1,65 @@
+package demago.gamjappang.domain.comment.infrastructure.adepter.in.web;
+
+import demago.gamjappang.domain.comment.applicationcore.port.in.CommentListUseCase;
+import demago.gamjappang.domain.comment.applicationcore.port.in.CreateCommentUseCase;
+import demago.gamjappang.domain.comment.applicationcore.port.in.DeleteCommentUseCase;
+import demago.gamjappang.domain.comment.applicationcore.port.in.command.CommentListCommand;
+import demago.gamjappang.domain.comment.applicationcore.port.in.command.CreateCommentCommand;
+import demago.gamjappang.domain.comment.applicationcore.port.in.command.DeleteCommentCommand;
+import demago.gamjappang.domain.comment.applicationcore.port.in.result.CommentListResult;
+import demago.gamjappang.domain.comment.infrastructure.adepter.in.web.dto.request.CreateCommentRequest;
+import demago.gamjappang.domain.comment.infrastructure.adepter.in.web.dto.response.CommentListResponse;
+import demago.gamjappang.global.security.userdetails.UserPrincipal;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/v1/comment")
+public class CommentController {
+
+    private final CreateCommentUseCase createCommentUseCase;
+    private final CommentListUseCase commentListUseCase;
+    private final DeleteCommentUseCase deleteCommentUseCase;
+
+    public CommentController(
+            CreateCommentUseCase createCommentUseCase,
+            CommentListUseCase commentListUseCase,
+            DeleteCommentUseCase deleteCommentUseCase
+    ) {
+        this.createCommentUseCase = createCommentUseCase;
+        this.commentListUseCase = commentListUseCase;
+        this.deleteCommentUseCase = deleteCommentUseCase;
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createComment(
+            @Valid @RequestBody CreateCommentRequest request,
+            @AuthenticationPrincipal UserPrincipal user
+    ) {
+        CreateCommentCommand command = request.toCreateCommentCommand(user.getId());
+
+        createCommentUseCase.createComment(command);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<CommentListResponse> getCommentList(@PathVariable Long postId) {
+        CommentListResult result = commentListUseCase.getCommentList(new CommentListCommand(postId));
+
+        return ResponseEntity.ok(CommentListResponse.from(result));
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+            @AuthenticationPrincipal UserPrincipal user,
+            @PathVariable Long commentId
+    ) {
+        deleteCommentUseCase.deleteComment(new DeleteCommentCommand(user.getId(), commentId));
+
+        return ResponseEntity.noContent().build();
+    }
+}
